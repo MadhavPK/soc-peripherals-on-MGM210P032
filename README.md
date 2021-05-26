@@ -28,4 +28,4 @@ Files `./peripheral_utils.c` and `./peripheral_utils.h` contain functions that d
 3. BRD4308A User Guide        - https://www.silabs.com/documents/public/user-guides/ug388-brd4308a-user-guide.pdf
 4. Peripheral Examples        - https://github.com/SiliconLabs/peripheral_examples/tree/master/series2
 
-
+<table border = "0">

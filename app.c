@@ -153,7 +153,7 @@ void appMain(gecko_configuration_t *pconfig)
 		  if(evt->data.evt_gatt_server_user_write_request.characteristic == gattdb_led0)
 		  {
 			  // Write user supplied value to LEDs.
-			  printLog("Setting LEDs...\r\n");
+			  printLog("Changing LED State...\r\n");
 			  if(charValue == 0x00)
 			  {
 				  printLog("Turn OFF LED command: %d\r\n", charValue);
