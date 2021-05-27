@@ -26,6 +26,14 @@
 
 #include "app.h"
 
+#define PREFFERED_PHY 	0X02
+#define ACCEPTED_PHY 	0X02
+
+/* Print boot message */
+static void bootMessage(struct gecko_msg_system_boot_evt_t *bootevt);
+/* Print Connection Data */
+static void printConnectionData(struct gecko_msg_le_connection_opened_evt_t *device);
+
 /***************************************************************************************************
  Local Variables
  **************************************************************************************************/
@@ -35,11 +43,6 @@ uint8 _conn_handle = 0xFF;
 
 /******* Button Related ********/
 uint8_t size_of_pb0_rise_count = 1;
-
-/* Print boot message */
-static void bootMessage(struct gecko_msg_system_boot_evt_t *bootevt);
-/* Print Connection Data */
-static void printConnectionData(struct gecko_msg_le_connection_opened_evt_t *device);
 
 /* Flag for indicating DFU Reset must be performed */
 static uint8_t boot_to_dfu = 0;
@@ -98,10 +101,19 @@ void appMain(gecko_configuration_t *pconfig)
 
       case gecko_evt_le_connection_opened_id:
       {
+	    uint16 response;
+	    /*---- Lines added by me ----*/
     	printConnectionData(&(evt->data.evt_le_connection_opened));
-
-    	/*---- Lines added by me ----*/
     	_conn_handle = evt->data.evt_le_connection_opened.connection;
+    	response = gecko_cmd_le_connection_set_preferred_phy(_conn_handle, PREFFERED_PHY, ACCEPTED_PHY)->result;
+    	 if(!(response))
+		  {
+			  printLog("The PHY change is SUCCESSFUL.\r\n");
+		  }
+		  else
+		  {
+			  printLog("The PHY change FAILED.\r\n");
+		  }
     	/*---- Lines added by me ----*/
         printLog("connection opened\r\n");
         break;
@@ -118,6 +130,7 @@ void appMain(gecko_configuration_t *pconfig)
         } else {
           /* Restart advertising after client has disconnected */
           gecko_cmd_le_gap_start_advertising(0, le_gap_general_discoverable, le_gap_connectable_scannable);
+          printLog("Started advertising...\r\n");
         }
 
         /*---- Lines added by me ----*/
@@ -190,8 +203,8 @@ void appMain(gecko_configuration_t *pconfig)
        **/
 	  case gecko_evt_gatt_server_user_read_request_id:
 	  {
-		  struct gecko_msg_gatt_server_characteristic_status_evt_t *pStatus;
-		  pStatus = &(evt->data.evt_gatt_server_characteristic_status);
+		  struct gecko_msg_gatt_server_user_read_request_evt_t *pStatus;
+		  pStatus = &(evt->data.evt_gatt_server_user_read_request);
 		  // Read LED
 		  if (pStatus->characteristic == gattdb_led0)
 		  {
@@ -208,7 +221,7 @@ void appMain(gecko_configuration_t *pconfig)
 			  // TODO: Create a proper way to send read response or remove adc_data characteristic
 			  printLog("Reading status of ADCs to charact...\r\n");
 			  gecko_cmd_gatt_server_send_user_read_response(
-					  _conn_handle, gattdb_adc_data, bg_err_success, 4, &singleResult);
+					  _conn_handle, gattdb_adc_data, bg_err_success, 5, &singleResult);
 		  }
 		  break;
 	  }
@@ -280,6 +293,21 @@ void appMain(gecko_configuration_t *pconfig)
 
 		  break;
 	  }
+
+	  case gecko_evt_le_connection_parameters_id:
+		printLog("Conn.parameters: interval %u units, txsize %u\r\n", evt->data.evt_le_connection_parameters.interval, evt->data.evt_le_connection_parameters.txsize);
+		break;
+
+		/* Event handlers for change of PHY */
+	  // Event ID for PHY change
+	  case gecko_evt_le_connection_phy_status_id:
+	  {
+		  struct gecko_msg_le_connection_phy_status_evt_t* phy_change;
+		  phy_change = &(evt->data.evt_le_connection_phy_status);
+		  printLog("The new PHY on connection %d is 0x%02d\r\n", phy_change->connection, phy_change->phy);
+		  break;
+	  }
+
 	  /*---- Lines added by me ----*/
 
       default:
