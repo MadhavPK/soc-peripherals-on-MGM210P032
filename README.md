@@ -5,6 +5,7 @@
 ## Software Used ##
 1. Gecko SDK v2.7.9 -> Bluetooth SDK v2.13.9.0
 2. Simplicity Studio v4
+3. GNU ARM GCC v7.2.1
 
 ## About the Project ##
 The project provides an example for accessing peripherals on **SiLabs MGM210P032JIA** module along with BLE stack running. Radio Board BRD4308A has MGM210P032JIA module. The module is based on the EFR32MG21 SoC. 
@@ -57,11 +58,26 @@ Mainboard has 2 on board push buttons out of which Button1 is used. This Button 
 Every button press generates a GPIO interrupt. The ISR keeps a counter for the number of times the button was pressed and generates a signal (SW interrupt to BLE stack). This signal raises an event in BLE stack. Using this event Client is notified of the counter value everytime button is pressed.
 
 ### IADC ###
+ADC Configurations  | Value
+---                 |---
+Mode                | Single input
+Port and Pin        | PC02
+Trigger Action      | Once
+Over Sampling Ratio | 2x
+`CLK_ADC_FREQ`      | 1,000,000 -> 1MHz
+`CLK_SRC_ADC_FREQ`  | 1,000,000 -> 1MHz
+* If Trigger Action was set to Continuous, then according to formula on pg14 of [AN1189: Incremental Analog to Digital Converter (IADC)](https://www.silabs.com/documents/public/application-notes/an1189-efr32-iadc.pdf), the converion time would be<br>
+![Formula for Conversion Time](https://user-images.githubusercontent.com/31771892/123038444-0bf26e00-d40e-11eb-94ee-b6e9c73c6588.png)<br>
+Conversion Time = 10/1,000,000<br>
+This means Samples per seconds = 1,000,000/10 = 100,000 = 100ksps<br>
+* Since, we are using Trigger Action as Once and we are invoking IADC every second using BLE stack soft timer, the effective Samples Per Second = 1 sps
+
 
 ## Sources and important links
-1. EFR32xG21 Reference Manual - https://www.silabs.com/documents/public/reference-manuals/efr32xg21-rm.pdf
-2. MGM210P Data Sheet         - https://www.silabs.com/documents/public/data-sheets/mgm210p-datasheet.pdf
-3. BRD4308A User Guide        - https://www.silabs.com/documents/public/user-guides/ug388-brd4308a-user-guide.pdf
-4. Peripheral Examples        - https://github.com/SiliconLabs/peripheral_examples/tree/master/series2
-
-<table border = "0">
+1. EFR32xG21 Reference Manual                             - https://www.silabs.com/documents/public/reference-manuals/efr32xg21-rm.pdf
+2. MGM210P Data Sheet                                     - https://www.silabs.com/documents/public/data-sheets/mgm210p-datasheet.pdf
+3. BRD4308A User Guide                                    - https://www.silabs.com/documents/public/user-guides/ug388-brd4308a-user-guide.pdf
+4. Peripheral Examples                                    - https://github.com/SiliconLabs/peripheral_examples/tree/master/series2
+5. AN1189: Incremental Analog to Digital Converter (IADC) - https://www.silabs.com/documents/public/application-notes/an1189-efr32-iadc.pdf
+6. AN0012: General Purpose Input Output                   - https://www.silabs.com/documents/public/application-notes/an0012-efm32-gpio.pdf
+7. Bluetooth Software API Reference Manual                - https://www.silabs.com/documents/public/reference-manuals/bluetooth-api-reference.pdf
