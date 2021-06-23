@@ -112,14 +112,14 @@ void GPIO_ODD_IRQHandler(void)
  *****************************************************************************
  * IADC_INIT_DEFAULT
  * 	IADC Warmup Mode	= Normal
- * 	srcClkPrescale		= CLK_SRC_ADC_FREQ	100000 -> 1MHz (changed)
+ * 	srcClkPrescale		= CLK_SRC_ADC_FREQ	1000000 -> 1MHz (changed)
  *****************************************************************************
  * IADC_ALLCONFIGS_DEFAULT
  * 	IADC_CONFIG_DEFAULT
  * 		Reference  		= Vdd (Changed)
  * 		OSR				= 2x
  * 		Gain			= 1x
- * 		adcClkPrescale	= CLK_ADC_FREQ	    100000 -> 1MHz (changed)
+ * 		adcClkPrescale	= CLK_ADC_FREQ	    1000000 -> 1MHz (changed)
  *****************************************************************************
  * IADC_INITSINGLE_DEFAULT
  * 	dataValidLevel		= _IADC_SCANFIFOCFG_DVL_VALID1 (changed)
