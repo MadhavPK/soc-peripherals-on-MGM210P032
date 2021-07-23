@@ -34,14 +34,6 @@
 #define IADC_INPUT_BUS          CDBUSALLOC
 #define IADC_INPUT_BUSALLOC     GPIO_CDBUSALLOC_CDEVEN0_ADC0
 
-/*******************************************************************************
- *******************************  Global Variables *****************************
- ******************************************************************************/
-extern uint8_t pb0_rise_count;
-extern uint8 _conn_handle;
-// Stores latest ADC sample and converts to volts
-extern uint32_t singleResult;
-
 /**************************************************************************//**
  * @brief  Forward Declarations
  *****************************************************************************/
@@ -50,7 +42,7 @@ void turnOnLed();
 void turnOffLed();
 void toggleLed();
 uint8_t getLedStatus();
-void setup_ext_interrupts(void);
+void setup_GPIO_interrupts(void);
 void initIADC (void);
 void adcDataToBeNotified();
 

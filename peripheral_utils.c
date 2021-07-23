@@ -1,14 +1,14 @@
 /*
- * peripheral_utils.c
+ * @file peripheral_utils.c
+ * @brief Various peripherals on MGM210P032JIA
+ *
  *
  *  Created on: Apr 8, 2021
- *      Author: MK
+ *  Author: MK
  *
  */
 
 #include "peripheral_utils.h"
-
-//static uint16 ADC_counter;
 
 // Configure Button 1 and LED 0
 void initGPIO()
@@ -21,7 +21,7 @@ void initGPIO()
 	GPIO_PinModeSet(BSP_LED0_PORT, BSP_LED0_PIN, gpioModePushPull, 1);
 
 	// Set PB01 - Button 1 as Input
-	GPIO_PinModeSet(BSP_BUTTON1_PORT, BSP_BUTTON1_PIN, gpioModeInput, 0);
+	GPIO_PinModeSet(BSP_BUTTON1_PORT, BSP_BUTTON1_PIN, gpioModeInputPullFilter, 1);
 
 }
 
@@ -58,7 +58,7 @@ uint8_t getLedStatus()
  * Set button 1 as GPIO input which will raise GPIO interrupt
  * Since we are using PortBPin1 we have to use ODD GPIO interrupt handler
  *****************************************************************************/
-void setup_ext_interrupts(void)
+void setup_GPIO_interrupts(void)
 {
   // Set Button 1 as input
   GPIO_PinModeSet(BSP_BUTTON1_PORT, BSP_BUTTON1_PIN, gpioModeInput, 0);
@@ -92,7 +92,7 @@ void GPIO_ODD_IRQHandler(void)
   /* Check if button 1 was pressed */
   if (interruptMask & (1 << BSP_BUTTON1_PIN))
   {
-    pb0_rise_count++;
+    pb1_rise_count++;
     // Send signal to BLE stack on channel 4
     gecko_external_signal(4);
   }
@@ -223,11 +223,17 @@ void IADC_IRQHandler(void)
   IADC_clearInt(IADC0, IADC_IF_SINGLEFIFODVL);
 }
 
+/*
+ * @brief ADC data to be Notified
+ *
+ */
 void adcDataToBeNotified()
 {
+	// Initialize
 	uint8_t adcDataBuffer[GATTDB_ADC_DATA_SIZE] = {0x01,0x02,0x03,0x04,0x05};
 	uint32_t adcData;
 	uint8_t *p = adcDataBuffer;
+	// Conversion (singleResult x 10^-3)
 	adcData = FLT_TO_UINT32(singleResult, -3);
 	printLog("adcData = 0x%08X\r\n",adcData);
 	UINT32_TO_BITSTREAM(p, adcData);

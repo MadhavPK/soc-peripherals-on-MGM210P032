@@ -24,7 +24,6 @@
 
 /* Size of Characteristic adc_data */
 #define GATTDB_ADC_DATA_SIZE 5
-/*---- Lines added by me ----*/
 
 /* DEBUG_LEVEL is used to enable/disable debug prints. Set DEBUG_LEVEL to 1 to enable debug prints */
 //#define DEBUG_LEVEL 0
@@ -47,6 +46,14 @@
 #define flushLog()
 #define printLog(...)
 #endif
+
+/*******************************************************************************
+ *******************************  Global Variables *****************************
+ ******************************************************************************/
+extern uint8_t pb1_rise_count;
+extern uint8 _conn_handle;
+// Stores latest ADC sample and converts to volts
+extern uint32_t singleResult;
 
 /* Main application */
 void appMain(gecko_configuration_t *pconfig);

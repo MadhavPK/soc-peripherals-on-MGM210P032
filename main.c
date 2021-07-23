@@ -53,14 +53,6 @@
  * @{
  **************************************************************************************************/
 
-/**************************************************************************//**
- * @brief  Global variables
- *****************************************************************************/
-uint8_t pb0_rise_count;
-//uint8 _conn_handle = 0xFF;
-/******* ADC Related ********/
-// Stores latest ADC sample and converts to volts
-uint32_t singleResult;
 
 /***********************************************************************************************//**
  * @addtogroup app
@@ -125,6 +117,7 @@ int main(void)
   initVcomEnable();
   /*---- Lines added by me ----*/
   initGPIO();
+  setup_GPIO_interrupts();
   /*---- Lines added by me ----*/
   /* Start application */
   appMain(&config);

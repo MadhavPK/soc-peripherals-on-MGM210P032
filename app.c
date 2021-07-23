@@ -35,14 +35,18 @@ static void bootMessage(struct gecko_msg_system_boot_evt_t *bootevt);
 static void printConnectionData(struct gecko_msg_le_connection_opened_evt_t *device);
 
 /***************************************************************************************************
- Local Variables
+ Global Variables
  **************************************************************************************************/
 /******* Stack Related ********/
-//static uint8 _conn_handle = 0xFF;
 uint8 _conn_handle = 0xFF;
 
 /******* Button Related ********/
-uint8_t size_of_pb0_rise_count = 1;
+uint8_t size_of_pb1_rise_count = 1;
+uint8_t pb1_rise_count;
+
+/******* ADC Related ********/
+// Stores latest ADC sample and converts to volts
+uint32_t singleResult;
 
 /* Flag for indicating DFU Reset must be performed */
 static uint8_t boot_to_dfu = 0;
@@ -83,10 +87,8 @@ void appMain(gecko_configuration_t *pconfig)
         bootMessage(&(evt->data.evt_system_boot));
         printLog("boot event - starting advertising\r\n");
 
-        /*---- Lines added by me ----*/
-        setup_ext_interrupts();
+        // Initialize the ADC
         initIADC();
-        /*---- Lines added by me ----*/
 
         /* Set advertising parameters. 100ms advertisement interval.
          * The first parameter is advertising set handle
@@ -102,7 +104,6 @@ void appMain(gecko_configuration_t *pconfig)
       case gecko_evt_le_connection_opened_id:
       {
 	    uint16 response;
-	    /*---- Lines added by me ----*/
     	printConnectionData(&(evt->data.evt_le_connection_opened));
     	_conn_handle = evt->data.evt_le_connection_opened.connection;
     	response = gecko_cmd_le_connection_set_preferred_phy(_conn_handle, PREFFERED_PHY, ACCEPTED_PHY)->result;
@@ -114,7 +115,6 @@ void appMain(gecko_configuration_t *pconfig)
 		  {
 			  printLog("The PHY change FAILED.\r\n");
 		  }
-    	/*---- Lines added by me ----*/
         printLog("connection opened\r\n");
         break;
       }
@@ -133,9 +133,7 @@ void appMain(gecko_configuration_t *pconfig)
           printLog("Started advertising...\r\n");
         }
 
-        /*---- Lines added by me ----*/
         turnOffLed();
-        /*---- Lines added by me ----*/
         break;
 
       /* Events related to OTA upgrading
@@ -195,12 +193,11 @@ void appMain(gecko_configuration_t *pconfig)
 //      case gecko_evt_gatt_server_attribute_value_id:
 //        	break;
 
-      /**
+      /* *
        * Event raised for read operation on LED0 characteristic and ADC characteristic
        * Since we made characteristic LED0 as user type we have to use the following event to handle
-       * user reads on characteristic LED0
-       *
-       **/
+       * user reads on characteristic LED0.
+       * */
 	  case gecko_evt_gatt_server_user_read_request_id:
 	  {
 		  struct gecko_msg_gatt_server_user_read_request_evt_t *pStatus;
@@ -221,28 +218,31 @@ void appMain(gecko_configuration_t *pconfig)
 			  // TODO: Create a proper way to send read response or remove adc_data characteristic
 			  printLog("Reading status of ADCs to charact...\r\n");
 			  gecko_cmd_gatt_server_send_user_read_response(
-					  _conn_handle, gattdb_adc_data, bg_err_success, 5, &singleResult);
+					  _conn_handle, gattdb_adc_data, bg_err_success, 4, &singleResult);
 		  }
 		  break;
 	  }
 
-	  /**
+	  /* *
 	   * Event handler for external signals
+	   * Send notification with number of button presses every time BUTTON 1 is pressed
 	   * */
 	  case gecko_evt_system_external_signal_id:
-		  printLog("\r\nGot signal #%X with Rise Count: %d\r\n", evt->data.evt_system_external_signal.extsignals, pb0_rise_count);
+		  printLog("\r\nGot signal #%X with Rise Count: %d\r\n", evt->data.evt_system_external_signal.extsignals, pb1_rise_count);
 		  // Notify the Client with number of button presses
-		  gecko_cmd_gatt_server_send_characteristic_notification(_conn_handle, gattdb_button_1, size_of_pb0_rise_count, &pb0_rise_count);
+		  gecko_cmd_gatt_server_send_characteristic_notification(
+				  _conn_handle, gattdb_button_1, size_of_pb1_rise_count, &pb1_rise_count);
 		  break;
 
-	  /**
-	   * Event handler when Notification is turned ON or OFF on characteristic BUTTON1
+	  /* *
+	   * Event handler when Notification is turned ON or OFF on characteristic BUTTON1 and ADC
 	   * */
 	  case gecko_evt_gatt_server_characteristic_status_id:
 	  {
 		  struct gecko_msg_gatt_server_characteristic_status_evt_t *pStatus;
 		  pStatus = &(evt->data.evt_gatt_server_characteristic_status);
 
+		  // If BUTTON1 notifications are turned ON
 		  if (pStatus->characteristic == gattdb_button_1)
 		  {
 			  if (pStatus->status_flags == gatt_server_client_config)
@@ -250,15 +250,18 @@ void appMain(gecko_configuration_t *pconfig)
 				  // Characteristic client configuration (CCC) for spp_data has been changed
 				  if (pStatus->client_config_flags == gatt_notification)
 				  {
-					  printLog("Notification ON %d\r\n", pb0_rise_count);
-					  gecko_cmd_gatt_server_send_characteristic_notification(_conn_handle, gattdb_button_1, size_of_pb0_rise_count, &pb0_rise_count);
+					  printLog("Button 1 Notification ON\r\n");
+					  // Send the number of button presses as soon as notification is turned ON
+					  gecko_cmd_gatt_server_send_characteristic_notification(
+							  _conn_handle, gattdb_button_1, size_of_pb1_rise_count, &pb1_rise_count);
 				  }
 				  else
 				  {
-					  printLog("Notification OFF %d\r\n", pb0_rise_count);
+					  printLog("Button 1 Notification OFF\r\n");
 				  }
 			  }
 		  }
+		  // If notification of ADC is turned ON
 		  else if(pStatus->characteristic == gattdb_adc_data)
 		  {
 			  if(pStatus->status_flags == gatt_server_client_config)
@@ -307,8 +310,6 @@ void appMain(gecko_configuration_t *pconfig)
 		  printLog("The new PHY on connection %d is 0x%02d\r\n", phy_change->connection, phy_change->phy);
 		  break;
 	  }
-
-	  /*---- Lines added by me ----*/
 
       default:
         break;
