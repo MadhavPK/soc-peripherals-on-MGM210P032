@@ -22,14 +22,17 @@ When Testing with mobile app, you will see following list of Custom Services and
 
 **Peripheral Test** {686d7b33-129f-4532-89c1-c502c6159bb3}
   - *LED0* {abe6b815-d38c-476e-ae7e-dd1d62e209de}
-    * Type: User
+    * Type: USER
     * Size: 1 byte
   - *BUTTON1* {ebff5ca7-0398-422a-a0ea-63fefb0765ec}
-    * Type: Hex
+    * Type: HEX
     * Size: 1 byte
   - *ADC DATA* {bb7b889f-587e-421f-a3b4-c3654998a742}
-    * Type: User
+    * Type: USER
     * Size: 5 byte
+  - *UART2 Data* {9b475432-881f-418a-98ca-003c65339261}
+    * Type: HEX
+    * Size: 80
 
 ## Peripherals Used ##
 ### GPIO ###
@@ -59,7 +62,7 @@ Every button press generates a GPIO interrupt. The ISR keeps a counter for the n
 
 ### IADC ###
 ADC Configurations  | Value
----                 |---
+---                 | ---
 Mode                | Single input
 Port and Pin        | PC02
 Trigger Action      | Once
@@ -71,7 +74,18 @@ Over Sampling Ratio | 2x
 Conversion Time = 10/1,000,000<br>
 This means Samples per seconds = 1,000,000/10 = 100,000 = 100ksps<br>
 * Since, we are using Trigger Action as Once and we are invoking IADC every second using BLE stack soft timer, the effective Samples Per Second = 1 sps
-
+* Enabling the notification will start the soft timer and also trigger IADC.
+### UART ###
+UART Configuration  | Value
+---                 | ---
+Tx Port and Pin     | PC00
+Rx Port and Pin     | PC01
+Baud Rate           | 115200
+Flow Control        | No
+Data Size           | 8 bit
+Parity              | None
+* The MGM210P has 3 USARTs, USART2 and been configured as asynchronous USART (i.e. UART). Since Rx can only take place in EM0 and EM1 the EM2 sleep must be blocked when MCU wants to receive the data.
+* Enabling notification will allow MCU to receive the data.
 
 ## Sources and important links
 1. EFR32xG21 Reference Manual                             - https://www.silabs.com/documents/public/reference-manuals/efr32xg21-rm.pdf
