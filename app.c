@@ -25,6 +25,7 @@
 #include "gatt_db.h"
 
 #include "app.h"
+#include "sleep.h"
 
 #define PREFFERED_PHY 	0X02
 #define ACCEPTED_PHY 	0X02
@@ -65,6 +66,10 @@ void appMain(gecko_configuration_t *pconfig)
   gecko_init(pconfig);
 
   while (1) {
+	outpos = inpos = 0;
+	// Zero out buffer
+	for (uint8_t i = 0; i < BUFLEN; i++)
+		buffer[i] = 0;
     /* Event pointer for handling events */
     struct gecko_cmd_packet* evt;
 
@@ -156,7 +161,6 @@ void appMain(gecko_configuration_t *pconfig)
         }
 
         /* *
-         * ---- Lines added by me ----
          * Check if characteristic LED0 was changed!
          * Since we made characteristic LED0 as user type we have to use the this event handler to write to the characteristic LED0
          * */
@@ -190,8 +194,22 @@ void appMain(gecko_configuration_t *pconfig)
 		  }
         break;
 
-//      case gecko_evt_gatt_server_attribute_value_id:
-//        	break;
+      // Event handler for
+      case gecko_evt_gatt_server_attribute_value_id:
+      {
+    	  struct gecko_msg_gatt_server_attribute_value_evt_t *pRxData = &(evt->data.evt_gatt_server_attribute_value);
+    	  printLog("Data Received: ");
+    	  for(uint8_t i = 0 ; i < pRxData->value.len; i++)
+    	  {
+    		  buffer[i] = pRxData->value.data[i];
+    		  printLog("%02X ", pRxData->value.data[i]);
+    	  }
+    	  outpos = pRxData->value.len;
+    	  printLog("outpos = %lu, pRxData->value.len = %d\r\n", outpos, pRxData->value.len);
+    	  // Enable transmit buffer level interrupt
+    	  USART_IntEnable(USART2, USART_IEN_TXBL);
+    	  break;
+      }
 
       /* *
        * Event raised for read operation on LED0 characteristic and ADC characteristic
@@ -242,7 +260,7 @@ void appMain(gecko_configuration_t *pconfig)
 		  struct gecko_msg_gatt_server_characteristic_status_evt_t *pStatus;
 		  pStatus = &(evt->data.evt_gatt_server_characteristic_status);
 
-		  // If BUTTON1 notifications are turned ON
+		  // If notifications of BUTTON1 is turned ON
 		  if (pStatus->characteristic == gattdb_button_1)
 		  {
 			  if (pStatus->status_flags == gatt_server_client_config)
@@ -278,6 +296,28 @@ void appMain(gecko_configuration_t *pconfig)
 					  gecko_cmd_hardware_set_soft_timer(0, 0, 0);
 					  printLog("ADC Notification OFF!\r\n");
 					  IADC_command(IADC0, iadcCmdStopSingle);
+				  }
+			  }
+		  }
+		  // If notification of UART-2 is turned ON
+		  else if (pStatus->characteristic == gattdb_uart2_data) {
+			  if (pStatus->status_flags == gatt_server_client_config)
+			  {
+				  // Characteristic client configuration (CCC) for spp_data has been changed
+				  if (pStatus->client_config_flags == gatt_notification || pStatus->client_config_flags == gatt_indication)
+				  {
+					  printLog("SPP Mode ON\r\n");
+					  SLEEP_SleepBlockBegin(sleepEM2); // Disable sleeping
+					  // Enable receive data valid interrupt
+					  USART_IntEnable(USART2, USART_IEN_RXDATAV);
+				  }
+				  else if(pStatus->client_config_flags == gatt_disable)
+				  {
+					  printLog("SPP Mode OFF\r\n");
+					  // Disable receive data valid interrupt
+					  USART_IntDisable(USART2, USART_IEN_RXDATAV);
+					  NVIC_ClearPendingIRQ(USART2_RX_IRQn);
+					  SLEEP_SleepBlockEnd(sleepEM2); // Enable sleeping
 				  }
 			  }
 		  }

@@ -118,6 +118,7 @@ int main(void)
   /*---- Lines added by me ----*/
   initGPIO();
   setup_GPIO_interrupts();
+  initUSART2();
   /*---- Lines added by me ----*/
   /* Start application */
   appMain(&config);

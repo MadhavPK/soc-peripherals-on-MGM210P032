@@ -74,12 +74,13 @@ peripheral_utils.o: ../peripheral_utils.c ../peripheral_utils.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\protocol\bluetooth\ble_stack\inc\common/bg_types.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\protocol\bluetooth\ble_stack\inc\common/bg_errorcodes.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\platform\emlib\inc/em_iadc.h \
- ../app.h \
+ ../app.h ../interrupt_usart_2.h \
+ D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\platform\emlib\inc/em_usart.h \
+ ../gatt_db.h \
+ D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\hardware\kit\common\drivers/retargetserial.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\hardware\kit\common\halconfig/retargetserialhalconfig.h \
- D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\app\bluetooth\common\util/infrastructure.h \
- ../gatt_db.h \
- D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h
+ D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\app\bluetooth\common\util/infrastructure.h
 
 ../peripheral_utils.h:
 
@@ -235,12 +236,16 @@ D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\platform\emlib\i
 
 ../app.h:
 
+../interrupt_usart_2.h:
+
+D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\platform\emlib\inc/em_usart.h:
+
+../gatt_db.h:
+
+D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h:
+
 D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\hardware\kit\common\drivers/retargetserial.h:
 
 D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\hardware\kit\common\halconfig/retargetserialhalconfig.h:
 
 D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\app\bluetooth\common\util/infrastructure.h:
-
-../gatt_db.h:
-
-D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h:

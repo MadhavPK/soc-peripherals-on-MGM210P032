@@ -83,7 +83,7 @@
     <characteristic id="adc_data" name="ADC Data" sourceId="custom.type" uuid="bb7b889f-587e-421f-a3b4-c3654998a742">
       <description>Single Ch, FW Triggered</description>
       <informativeText>Custom characteristic</informativeText>
-      <value length="4" type="user" variable_length="false"/>
+      <value length="5" type="user" variable_length="false"/>
       <properties notify="true" notify_requirement="optional" read="true" read_requirement="optional"/>
     </characteristic>
   </service>

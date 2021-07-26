@@ -81,6 +81,8 @@ main.o: ../main.c ../init_mcu.h ../board_features.h \
  ../app.h ../peripheral_utils.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\platform\emlib\inc/em_iadc.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\app\bluetooth\common\util/infrastructure.h \
+ ../interrupt_usart_2.h \
+ D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\platform\emlib\inc/em_usart.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\hardware\kit\common\drivers/retargetserial.h \
  D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\hardware\kit\common\halconfig/retargetserialhalconfig.h
 
@@ -257,6 +259,10 @@ D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\hardware\kit\com
 D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\platform\emlib\inc/em_iadc.h:
 
 D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\app\bluetooth\common\util/infrastructure.h:
+
+../interrupt_usart_2.h:
+
+D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\platform\emlib\inc/em_usart.h:
 
 D:\Study\ Material\Proj-on-GitHub\soc-peripherals-on-MGM210P032\hardware\kit\common\drivers/retargetserial.h:
 

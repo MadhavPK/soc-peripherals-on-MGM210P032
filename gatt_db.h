@@ -21,5 +21,6 @@ extern const struct bg_gattdb_def bg_gattdb_data;
 #define gattdb_led0                            26
 #define gattdb_button_1                        29
 #define gattdb_adc_data                        33
+#define gattdb_uart2_data                      37
 
 #endif

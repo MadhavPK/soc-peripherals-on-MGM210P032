@@ -21,6 +21,7 @@
 
 /*---- Lines added by me ----*/
 #include "peripheral_utils.h"
+#include "interrupt_usart_2.h"
 
 /* Size of Characteristic adc_data */
 #define GATTDB_ADC_DATA_SIZE 5

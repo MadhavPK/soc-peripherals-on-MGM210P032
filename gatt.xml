@@ -86,5 +86,13 @@
       <value length="5" type="user" variable_length="false"/>
       <properties notify="true" notify_requirement="optional" read="true" read_requirement="optional"/>
     </characteristic>
+    
+    <!--UART2 Data-->
+    <characteristic id="uart2_data" name="UART2 Data" sourceId="custom.type" uuid="9b475432-881f-418a-98ca-003c65339261">
+      <description>Tx - PC0; Rx - PC1 </description>
+      <informativeText>Custom characteristic</informativeText>
+      <value length="80" type="hex" variable_length="false">0x00</value>
+      <properties notify="true" notify_requirement="optional" write_no_response="true" write_no_response_requirement="optional"/>
+    </characteristic>
   </service>
 </gatt>
