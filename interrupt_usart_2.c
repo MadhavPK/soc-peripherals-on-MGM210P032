@@ -82,7 +82,7 @@ void USART2_RX_IRQHandler(void)
 	  printLog("inpos = %lu\r\n", inpos);
 	  // Send buffer[] as notification
 	  gecko_cmd_gatt_server_send_characteristic_notification(
-			  _conn_handle, gattdb_uart2_data, inpos, buffer);
+			  _conn_handle, gattdb_uart_data, inpos, buffer);
 	  inpos = 0;
   }
 }

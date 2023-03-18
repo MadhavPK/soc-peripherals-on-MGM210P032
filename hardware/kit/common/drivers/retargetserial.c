@@ -35,6 +35,10 @@
 #include "em_gpio.h"
 #include "retargetserial.h"
 
+#include "gatt_db.h"
+#include "interrupt_usart_2.h"
+#include "app.h"
+
 #if defined(HAL_CONFIG)
 #include "retargetserialhalconfig.h"
 #else
@@ -99,28 +103,47 @@ static void enableRxInterrupt()
  *****************************************************************************/
 void RETARGET_IRQ_NAME(void)
 {
-#if defined(RETARGET_USART)
-  if (RETARGET_UART->STATUS & USART_STATUS_RXDATAV) {
-#else
-  if (RETARGET_UART->IF & LEUART_IF_RXDATAV) {
-#endif
-
-    if (rxCount < RXBUFSIZE) {
-      /* There is room for data in the RX buffer so we store the data. */
-      rxBuffer[rxWriteIndex] = RETARGET_RX(RETARGET_UART);
-      rxWriteIndex++;
-      rxCount++;
-      if (rxWriteIndex == RXBUFSIZE) {
-        rxWriteIndex = 0;
-      }
-    } else {
-      /* The RX buffer is full so we must wait for the RETARGET_ReadChar()
-       * function to make some more room in the buffer. RX interrupts are
-       * disabled to let the ISR exit. The RX interrupt will be enabled in
-       * RETARGET_ReadChar(). */
-      disableRxInterrupt();
+//#if defined(RETARGET_USART)
+//  if (RETARGET_UART->STATUS & USART_STATUS_RXDATAV) {
+//#else
+//  if (RETARGET_UART->IF & LEUART_IF_RXDATAV) {
+//#endif
+//
+//    if (rxCount < RXBUFSIZE) {
+//      /* There is room for data in the RX buffer so we store the data. */
+//      rxBuffer[rxWriteIndex] = RETARGET_RX(RETARGET_UART);
+//      rxWriteIndex++;
+//      rxCount++;
+//      if (rxWriteIndex == RXBUFSIZE) {
+//        rxWriteIndex = 0;
+//      }
+//    } else {
+//      /* The RX buffer is full so we must wait for the RETARGET_ReadChar()
+//       * function to make some more room in the buffer. RX interrupts are
+//       * disabled to let the ISR exit. The RX interrupt will be enabled in
+//       * RETARGET_ReadChar(). */
+//      disableRxInterrupt();
+//    }
+//  }
+	buffer[inpos] = USART0->RXDATA;
+  //  If Rx data is not \n AND Buffer is not full increment inpos
+    if ((buffer[inpos] != 0x0D)&&(inpos < BUFLEN))
+    {
+  	  inpos++;
     }
-  }
+    else
+    {
+  	  for(uint8_t i = 0; i < inpos; i++)
+  	  {
+//  		  printLog("%02X ", buffer[i]);
+  		printLog("%c ", buffer[i]);
+  	  }
+  	  printLog("inpos = %lu\r\n", inpos);
+  	  // Send buffer[] as notification
+  	  gecko_cmd_gatt_server_send_characteristic_notification(
+  			  _conn_handle, gattdb_uart_data, inpos, buffer);
+  	  inpos = 0;
+    }
 }
 
 /**************************************************************************//**

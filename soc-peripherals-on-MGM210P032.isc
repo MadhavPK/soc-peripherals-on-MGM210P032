@@ -34,7 +34,7 @@ appPlugin: stack_bridge=false
     <informativeText>Abstract: The generic_access service contains generic information about the device. All available Characteristics are readonly. </informativeText>
     <characteristic id="device_name" name="Device Name" sourceId="org.bluetooth.characteristic.gap.device_name" uuid="2A00">
       <informativeText/>
-      <value length="11" type="utf-8" variable_length="false">Peripherals</value>
+      <value length="16" type="utf-8" variable_length="false">SiLabs Dev Board</value>
       <properties read="true" read_requirement="optional" write="true" write_requirement="optional"/>
     </characteristic>
     <characteristic name="Appearance" sourceId="org.bluetooth.characteristic.gap.appearance" uuid="2A01">
@@ -89,8 +89,8 @@ appPlugin: stack_bridge=false
       <value length="5" type="user" variable_length="false"/>
       <properties notify="true" notify_requirement="optional" read="true" read_requirement="optional"/>
     </characteristic>
-    <characteristic id="uart2_data" name="UART2 Data" sourceId="custom.type" uuid="9b475432-881f-418a-98ca-003c65339261">
-      <description>Tx - PC0; Rx - PC1 </description>
+    <characteristic id="uart_data" name="UART Data" sourceId="custom.type" uuid="9b475432-881f-418a-98ca-003c65339261">
+      <description>Tx - PA05; Rx - PA06 </description>
       <informativeText>Custom characteristic</informativeText>
       <value length="80" type="hex" variable_length="false">0x00</value>
       <properties notify="true" notify_requirement="optional" write_no_response="true" write_no_response_requirement="optional"/>

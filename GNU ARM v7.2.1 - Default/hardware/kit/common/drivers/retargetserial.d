@@ -71,7 +71,24 @@ hardware/kit/common/drivers/retargetserial.o: \
  C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\hardware\module\config/sl_module_mgm210p032jia.h \
  C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\platform\emlib\inc/em_emu.h \
  C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/hal-config-app-common.h \
- C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\platform\emlib\inc/em_usart.h
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/gatt_db.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_types.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/interrupt_usart_2.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/peripheral_utils.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\soc/native_gecko.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_types.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/gecko_configuration.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_errorcodes.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\platform\emlib\inc/em_iadc.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/app.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/interrupt_usart_2.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\hardware\kit\common\drivers/retargetserial.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\app\bluetooth\common\util/infrastructure.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/gatt_db.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\platform\emlib\inc/em_usart.h \
+ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/app.h
 
 C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\platform\Device\SiliconLabs\MGM21\Include/em_device.h:
 
@@ -215,4 +232,38 @@ C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_gi
 
 C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/hal-config-app-common.h:
 
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/gatt_db.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_types.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/interrupt_usart_2.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/peripheral_utils.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\soc/native_gecko.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_types.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/gecko_configuration.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\protocol\bluetooth\ble_stack\inc\common/bg_errorcodes.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\platform\emlib\inc/em_iadc.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/app.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/interrupt_usart_2.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\hardware\kit\common\drivers/retargetserial.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\app\bluetooth\common\util/infrastructure.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/gatt_db.h:
+
 C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git\platform\emlib\inc/em_usart.h:
+
+C:\Users\z004emnf\SimplicityStudio\v4_workspace\soc-peripherals-on-MGM210P032_git/app.h:

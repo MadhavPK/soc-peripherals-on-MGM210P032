@@ -104,7 +104,9 @@ void appMain(gecko_configuration_t *pconfig)
 			 * The next two parameters are minimum and maximum advertising interval, both in
 			 * units of (milliseconds * 1.6).
 			 * The last two parameters are duration and maxevents left as default. */
-			gecko_cmd_le_gap_set_advertise_timing(0, 160, 160, 0, 0);
+			// gecko_cmd_le_gap_set_advertise_timing(0, 160, 160, 0, 0);
+			// Value in the units of 0.625 ms => 0x20 x 0.625ms = 20ms
+			gecko_cmd_le_gap_set_advertise_timing(0, 0x20, 0x20, 0, 0);
 
 			/* Start general advertising and enable connections. */
 			gecko_cmd_le_gap_start_advertising(0, le_gap_general_discoverable,
@@ -222,13 +224,15 @@ void appMain(gecko_configuration_t *pconfig)
 			for (uint8_t i = 0; i < pRxData->value.len; i++)
 			{
 				buffer[i] = pRxData->value.data[i];
-				printLog("%02X ", pRxData->value.data[i]);
+												
+//				printLog("%02X ", pRxData->value.data[i]);
+				printLog("%c ", pRxData->value.data[i]);
 			}
 			outpos = pRxData->value.len;
 			printLog("outpos = %lu, pRxData->value.len = %d\r\n", outpos,
 					pRxData->value.len);
 			// Enable transmit buffer level interrupt
-			USART_IntEnable(USART2, USART_IEN_TXBL);
+			USART_IntEnable(USART0, USART_IEN_TXBL);
 			break;
 		}
 
@@ -324,7 +328,7 @@ void appMain(gecko_configuration_t *pconfig)
 				}
 			}
 			// If notification of UART-2 is turned ON
-			else if (pStatus->characteristic == gattdb_uart2_data)
+			else if (pStatus->characteristic == gattdb_uart_data)
 			{
 				if (pStatus->status_flags == gatt_server_client_config)
 				{
@@ -335,14 +339,14 @@ void appMain(gecko_configuration_t *pconfig)
 						printLog("SPP Mode ON\r\n");
 						SLEEP_SleepBlockBegin(sleepEM2); // Disable sleeping
 						// Enable receive data valid interrupt
-						USART_IntEnable(USART2, USART_IEN_RXDATAV);
+						USART_IntEnable(USART0, USART_IEN_RXDATAV);
 					}
 					else if (pStatus->client_config_flags == gatt_disable)
 					{
 						printLog("SPP Mode OFF\r\n");
 						// Disable receive data valid interrupt
-						USART_IntDisable(USART2, USART_IEN_RXDATAV);
-						NVIC_ClearPendingIRQ(USART2_RX_IRQn);
+						USART_IntDisable(USART0, USART_IEN_RXDATAV);
+						NVIC_ClearPendingIRQ(USART0_RX_IRQn);
 						SLEEP_SleepBlockEnd(sleepEM2); // Enable sleeping
 					}
 				}
@@ -364,13 +368,20 @@ void appMain(gecko_configuration_t *pconfig)
 		}
 
 		case gecko_evt_le_connection_parameters_id:
+		{
+			uint16 interval = evt->data.evt_le_connection_parameters.interval;
+			uint16 latency = evt->data.evt_le_connection_parameters.latency;
+			uint16 timeout = evt->data.evt_le_connection_parameters.timeout;
+			printLog("connection interval %d, latency %d, timeout %d ms\n",
+					interval, latency, timeout * 10);
 			printLog("Conn.parameters: interval %u units, txsize %u\r\n",
 					evt->data.evt_le_connection_parameters.interval,
 					evt->data.evt_le_connection_parameters.txsize);
 			break;
+		}
 
-			/* Event handlers for change of PHY */
-			// Event ID for PHY change
+		/* Event handlers for change of PHY */
+		// Event ID for PHY change
 		case gecko_evt_le_connection_phy_status_id:
 		{
 			struct gecko_msg_le_connection_phy_status_evt_t* phy_change;
